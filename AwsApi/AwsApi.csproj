@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{30FD235E-24EB-4F73-B72B-B35D82399208}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AwsApi</RootNamespace>
+    <AssemblyName>AwsApi</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Atom\Alexa\AtomAtsAlexa.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsCountry.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsCountryCode.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsName.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsDataUrl.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsGlobal.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsList.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsOperationRequest.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsPageViews.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsPerMillion.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsPerUser.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsRank.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsReach.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsRequestId.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsResponse.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsResponseStatus.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsSite.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsSites.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsStatusCode.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsTopSites.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsTopSitesResponse.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsTopSitesResult.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsTotalSites.cs" />
+    <Compile Include="Atom\AtomCode.cs" />
+    <Compile Include="Atom\Atom.cs" />
+    <Compile Include="Atom\AtomError.cs" />
+    <Compile Include="Atom\AtomErrors.cs" />
+    <Compile Include="Atom\AtomException.cs" />
+    <Compile Include="Atom\AtomMessage.cs" />
+    <Compile Include="Atom\AtomRequestId.cs" />
+    <Compile Include="Atom\AtomResponse.cs" />
+    <Compile Include="AwsException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AwsAlexaRequest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DotNetApi\DotNetApi\DotNetApi.csproj">
+      <Project>{475f767e-2288-4e56-9b90-179a10dcab49}</Project>
+      <Name>DotNetApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
