@@ -80,6 +80,9 @@ namespace AwsApiTest
 				AtomAtsTopSitesResponse response = this.request.End(result);
 
 				this.textBox.AppendText(string.Format("[{0}] Finished request: success.\r\n", DateTime.Now));
+
+				// Show the response.
+				this.textBox.AppendText(result.ReceiveData.ToString());
 			}
 			catch (AwsException exception)
 			{
