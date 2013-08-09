@@ -30,7 +30,7 @@ namespace AwsApi.Atom
 	[Serializable]
 	public sealed class AtomErrors : Atom, IEnumerable<AtomError>
 	{
-		internal static readonly string xmlPrefix = null;
+		internal const string xmlPrefix = null;
 		internal const string xmlName = "Errors";
 
 		private List<AtomError> errors = new List<AtomError>();
@@ -40,10 +40,8 @@ namespace AwsApi.Atom
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomErrors(XElement element)
+			: base(element, AtomErrors.xmlPrefix, AtomErrors.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomErrors.xmlPrefix, AtomErrors.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
 			foreach (XElement el in element.Elements(AtomError.xmlPrefix, AtomError.xmlName))
 			{
@@ -77,6 +75,19 @@ namespace AwsApi.Atom
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomErrors(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomErrors ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomErrors.Parse(element.Element(AtomErrors.xmlPrefix, AtomErrors.xmlName));
 		}
 
 		/// <summary>

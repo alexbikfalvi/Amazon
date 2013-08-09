@@ -31,23 +31,17 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "Country";
 
-		private AtomAtsRank rank;
-		private AtomAtsReach reach;
-		private AtomAtsPageViews pageViews;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsCountry(XElement element)
+			: base(element, AtomAtsCountry.xmlPrefix, AtomAtsCountry.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsCountry.xmlPrefix, AtomAtsCountry.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.rank = AtomAtsRank.Parse(element.Element(AtomAtsRank.xmlPrefix, AtomAtsRank.xmlName));
-			this.reach = AtomAtsReach.Parse(element.Element(AtomAtsReach.xmlPrefix, AtomAtsReach.xmlName));
-			this.pageViews = AtomAtsPageViews.Parse(element.Element(AtomAtsPageViews.xmlPrefix, AtomAtsPageViews.xmlName));
+			this.Rank = AtomAtsRank.ParseChild(element);
+			this.Reach = AtomAtsReach.ParseChild(element);
+			this.PageViews = AtomAtsPageViews.ParseChild(element);
 		}
 
 		// Public properties.
@@ -55,15 +49,15 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the rank property.
 		/// </summary>
-		public AtomAtsRank Rank { get { return this.rank; } }
+		public AtomAtsRank Rank { get; private set; }
 		/// <summary>
 		/// Gets the reach property.
 		/// </summary>
-		public AtomAtsReach Reach { get { return this.reach; } }
+		public AtomAtsReach Reach { get; private set; }
 		/// <summary>
 		/// Gets the page views property.
 		/// </summary>
-		public AtomAtsPageViews PageViews { get { return this.pageViews; } }
+		public AtomAtsPageViews PageViews { get; private set; }
 
 		// Public methods.
 
@@ -78,6 +72,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsCountry(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsCountry ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsCountry.Parse(element.Element(AtomAtsCountry.xmlPrefix, AtomAtsCountry.xmlName));
 		}
 	}
 }

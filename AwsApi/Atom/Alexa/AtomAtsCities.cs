@@ -17,37 +17,50 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using DotNetApi.Xml;
 
 namespace AwsApi.Atom.Alexa
 {
 	/// <summary>
-	/// A class representing an AWS country name atom object.
+	/// A class representing an AWS cities atom object.
 	/// </summary>
 	[Serializable]
-	public sealed class AtomAtsName : Atom
+	public sealed class AtomAtsCities : Atom, IEnumerable<AtomAtsCity>
 	{
 		internal const string xmlPrefix = "aws";
-		internal const string xmlName = "CountryName";
+		internal const string xmlName = "Cities";
+
+		private List<AtomAtsCity> sites = new List<AtomAtsCity>();
 
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
-		private AtomAtsName(XElement element)
-			: base(element, AtomAtsName.xmlPrefix, AtomAtsName.xmlName)
+		private AtomAtsCities(XElement element)
+			: base(element, AtomAtsCities.xmlPrefix, AtomAtsCities.xmlName)
 		{
-			// Parse the XML element value.
-			this.Value = element.Value;
+			// Parse the XML element members.
+			foreach (XElement el in element.Elements(AtomAtsCity.xmlPrefix, AtomAtsCity.xmlName))
+			{
+				// Add a new site atom object to the list.
+				this.sites.Add(AtomAtsCity.Parse(el));
+			}
 		}
 
 		// Public properties.
 
 		/// <summary>
-		/// Gets the value of the current atom element.
+		/// Gets the atom city at the specified index.
 		/// </summary>
-		public string Value { get; private set; }
+		/// <param name="index">The index.</param>
+		/// <returns>The atom site.</returns>
+		public AtomAtsCity this[int index]
+		{
+			get { return this.sites[index]; }
+		}
 
 		// Public methods.
 
@@ -56,34 +69,43 @@ namespace AwsApi.Atom.Alexa
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		/// <returns>The parsed atom object or null if the XML element is null.</returns>
-		public static AtomAtsName Parse(XElement element)
+		public static AtomAtsCities Parse(XElement element)
 		{
 			// If the XML element is null, return null.
 			if (null == element) return null;
 			// Else, return a new atom object.
-			return new AtomAtsName(element);
+			return new AtomAtsCities(element);
 		}
 
 		/// <summary>
-		/// Parses the first child XML element into the corresponding atom object.
+		/// Parses the XML element into the corresponding atom object.
 		/// </summary>
-		/// <param name="element">The parent XML element.</param>
-		/// <returns>The parsed atom object or null if no child is found.</returns>
-		public static AtomAtsName ParseChild(XElement element)
+		/// <param name="element">The XML element.</param>
+		/// <returns>The parsed atom object or null if the XML element is null.</returns>
+		public static AtomAtsCities ParseChild(XElement element)
 		{
 			// If the XML element is null, throw an exception.
 			if (null == element) throw new AtomException("Parent element cannot be null.");
-			// Parse the first child element.
-			return AtomAtsName.Parse(element.Element(AtomAtsName.xmlPrefix, AtomAtsName.xmlName));
+			// Else, return a new atom object.
+			return AtomAtsCities.Parse(element.Element(AtomAtsCities.xmlPrefix, AtomAtsCities.xmlName));
 		}
 
 		/// <summary>
-		/// Converts this object into a string.
+		/// Returns the enumerator for the list of categories.
 		/// </summary>
-		/// <returns>The string.</returns>
-		public override string ToString()
+		/// <returns>The enumerator.</returns>
+		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return this.Value;
+			return this.GetEnumerator();
+		}
+
+		/// <summary>
+		/// Returns the enumerator for the list of categories.
+		/// </summary>
+		/// <returns>The enumerator.</returns>
+		public IEnumerator<AtomAtsCity> GetEnumerator()
+		{
+			return this.sites.GetEnumerator();
 		}
 	}
 }

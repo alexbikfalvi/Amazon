@@ -31,21 +31,16 @@ namespace AwsApi.Atom
 		internal static readonly string xmlPrefix = null;
 		internal const string xmlName = "Response";
 
-		private AtomErrors errors;
-		private AtomRequestId requestId;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomResponse(XElement element)
+			: base(element, AtomResponse.xmlPrefix, AtomResponse.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomResponse.xmlPrefix, AtomResponse.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.errors = AtomErrors.Parse(element.Element(AtomErrors.xmlPrefix, AtomErrors.xmlName));
-			this.requestId = AtomRequestId.Parse(element.Element(AtomRequestId.xmlPrefix, AtomRequestId.xmlName));
+			this.Errors = AtomErrors.ParseChild(element);
+			this.RequestId = AtomRequestId.ParseChild(element);
 		}
 
 		// Public properties.
@@ -53,11 +48,11 @@ namespace AwsApi.Atom
 		/// <summary>
 		/// Gets the errors property.
 		/// </summary>
-		public AtomErrors Errors { get { return this.errors; } }
+		public AtomErrors Errors { get; private set; }
 		/// <summary>
 		/// Gets the request ID property.
 		/// </summary>
-		public AtomRequestId RequestId { get { return this.requestId; } }
+		public AtomRequestId RequestId { get; private set; }
 
 		// Public methods.
 
@@ -72,6 +67,19 @@ namespace AwsApi.Atom
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomResponse(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomResponse ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomResponse.Parse(element.Element(AtomResponse.xmlPrefix, AtomResponse.xmlName));
 		}
 	}
 }

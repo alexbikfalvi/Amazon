@@ -202,55 +202,34 @@ namespace AwsApi
 
 			// Append the host, access key and action.
 			builderQuery.AppendFormat("AWSAccessKeyId={0}&Action={1}", Uri.EscapeDataString(accessKey.ConvertToUnsecureString()), Uri.EscapeDataString(AwsAlexaRequest.Action));
-			// Append the response group.
-			builderQuery.AppendFormat("&ResponseGroup={0}", Uri.EscapeDataString(AwsAlexaRequest.responseGroups[(int)responseGroup]));
-			// Append the country code, if any.
-			if ((null != countryCode) && (string.Empty != countryCode))
-			{
-				builderQuery.AppendFormat("&CountryCode={0}", Uri.EscapeDataString(countryCode));
-			}
+			// Append the count value, if any.
+			builderQuery.AppendFormat("&Count={0}", count.HasValue ? count.Value.ToString() : string.Empty);
 			// Append the city code, if any.
 			if ((null != cityCode) && (string.Empty != cityCode))
 			{
 				builderQuery.AppendFormat("&CityCode={0}", Uri.EscapeDataString(cityCode));
 			}
-			// Append the start value, if any.
-			if (start.HasValue)
+			// Append the country code, if any.
+			if ((null != countryCode) && (string.Empty != countryCode))
 			{
-				builderQuery.AppendFormat("&Start={0}", start.Value);
+				builderQuery.AppendFormat("&CountryCode={0}", Uri.EscapeDataString(countryCode));
 			}
-			// Append the count value, if any.
-			if (count.HasValue)
-			{
-				builderQuery.AppendFormat("&Count={0}", count.Value);
-			}
+			// Append the response group.
+			builderQuery.AppendFormat("&ResponseGroup={0}", Uri.EscapeDataString(AwsAlexaRequest.responseGroups[(int)responseGroup]));
 			// Append the signature method.
 			builderQuery.AppendFormat("&SignatureMethod={0}", Uri.EscapeDataString(AwsAlexaRequest.signatureMethod));
 			// Append the signature version.
 			builderQuery.AppendFormat("&SignatureVersion={0}", AwsAlexaRequest.signatureVersion);
+			// Append the start value, if any.
+			builderQuery.AppendFormat("&Start={0}", start.HasValue ? start.Value.ToString() : string.Empty);
 			// Append the timestamp.
-			builderQuery.AppendFormat("&Timestamp={0}", "2013-07-31T12%3A40%3A41.770Z");//Uri.EscapeDataString(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z")));
-
-			StringBuilder builder = new StringBuilder(
-				//"AWSAccessKeyId=AKIAJH47JLHRJ4S57FFA&Action=TopSites&ResponseGroup=ListCities&Start=1&Count=10&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2013-07-31T12%3A40%3A41.770Z"
-				"AWSAccessKeyId=AKIAJH47JLHRJ4S57FFA&Action=TopSites&Count=2&ResponseGroup=ListCities&SignatureMethod=HmacSHA256&SignatureVersion=2&Start=1&Timestamp=2013-07-31T12%3A40%3A41.770Z"
-			);
-
-			string s1 = builderQuery.ToString();
-			string s2 = builder.ToString();
-
-			//2013-07-31T10%3A31%3A00.5020007Z
-			//2013-07-25T10%3A40%3A41.770Z
+			builderQuery.AppendFormat("&Timestamp={0}", Uri.EscapeDataString(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")));
 			// Create the string to sign.
 			string stringToSign = string.Format("{0}\n{1}\n/\n{2}", AwsAlexaRequest.method, AwsAlexaRequest.host, builderQuery.ToString());
-			string stringToSign1 = string.Format("{0}\n{1}\n/\n{2}", AwsAlexaRequest.method, AwsAlexaRequest.host, builder.ToString());
 			// Append the signature.
 			builderQuery.AppendFormat("&Signature={0}", Uri.EscapeDataString(this.CreateSignature(stringToSign, secretKey)));
-			builder.AppendFormat("&Signature={0}", Uri.EscapeDataString(this.CreateSignature(stringToSign1, secretKey)));
 			// Create and return the URL for the query.
-			//return new Uri(string.Format("http://{0}/?{1}", AwsAlexaRequest.host, builderQuery.ToString()));
-			return new Uri(string.Format("http://{0}/?{1}", AwsAlexaRequest.host, builder.ToString()));
-			//return new Uri("http://ats.amazonaws.com/?AWSAccessKeyId=AKIAJH47JLHRJ4S57FFA&Action=TopSites&Count=2&CountryCode=&ResponseGroup=ListCities&SignatureMethod=HmacSHA256&SignatureVersion=2&Start=1&Timestamp=2013-07-25T10%3A25%3A41.770Z&Signature=y3M07u%2B1sU8zJR%2B%2BHnDvB1MA8TWwMo%2B8I7zNbbYTLLo%3D");
+			return new Uri(string.Format("http://{0}/?{1}", AwsAlexaRequest.host, builderQuery.ToString()));
 		}
 
 		/// <summary>

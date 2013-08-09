@@ -36,6 +36,15 @@ namespace AwsApi.Atom
 		/// Creates a new atom exception instance.
 		/// </summary>
 		/// <param name="message">The exception message.</param>
+		public AtomException(string message)
+			: base(message)
+		{
+		}
+
+		/// <summary>
+		/// Creates a new atom exception instance.
+		/// </summary>
+		/// <param name="message">The exception message.</param>
 		/// <param name="xml">The XML element that cannot be parsed.</param>
 		public AtomException(string message, XElement xml)
 			: base(message)

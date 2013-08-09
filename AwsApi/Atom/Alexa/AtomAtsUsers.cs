@@ -23,23 +23,23 @@ using DotNetApi.Xml;
 namespace AwsApi.Atom.Alexa
 {
 	/// <summary>
-	/// A class representing an AWS country name atom object.
+	/// A class representing an AWS users atom object.
 	/// </summary>
 	[Serializable]
-	public sealed class AtomAtsName : Atom
+	public sealed class AtomAtsUsers : Atom
 	{
 		internal const string xmlPrefix = "aws";
-		internal const string xmlName = "CountryName";
+		internal const string xmlName = "Users";
 
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
-		private AtomAtsName(XElement element)
-			: base(element, AtomAtsName.xmlPrefix, AtomAtsName.xmlName)
+		private AtomAtsUsers(XElement element)
+			: base(element, AtomAtsUsers.xmlPrefix, AtomAtsUsers.xmlName)
 		{
 			// Parse the XML element value.
-			this.Value = element.Value;
+			this.Value = element.Value.ToDecimal();
 		}
 
 		// Public properties.
@@ -47,7 +47,7 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the value of the current atom element.
 		/// </summary>
-		public string Value { get; private set; }
+		public decimal Value { get; private set; }
 
 		// Public methods.
 
@@ -56,12 +56,12 @@ namespace AwsApi.Atom.Alexa
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		/// <returns>The parsed atom object or null if the XML element is null.</returns>
-		public static AtomAtsName Parse(XElement element)
+		public static AtomAtsUsers Parse(XElement element)
 		{
 			// If the XML element is null, return null.
 			if (null == element) return null;
 			// Else, return a new atom object.
-			return new AtomAtsName(element);
+			return new AtomAtsUsers(element);
 		}
 
 		/// <summary>
@@ -69,12 +69,12 @@ namespace AwsApi.Atom.Alexa
 		/// </summary>
 		/// <param name="element">The parent XML element.</param>
 		/// <returns>The parsed atom object or null if no child is found.</returns>
-		public static AtomAtsName ParseChild(XElement element)
+		public static AtomAtsUsers ParseChild(XElement element)
 		{
 			// If the XML element is null, throw an exception.
 			if (null == element) throw new AtomException("Parent element cannot be null.");
 			// Parse the first child element.
-			return AtomAtsName.Parse(element.Element(AtomAtsName.xmlPrefix, AtomAtsName.xmlName));
+			return AtomAtsUsers.Parse(element.Element(AtomAtsUsers.xmlPrefix, AtomAtsUsers.xmlName));
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace AwsApi.Atom.Alexa
 		/// <returns>The string.</returns>
 		public override string ToString()
 		{
-			return this.Value;
+			return this.Value.ToString();
 		}
 	}
 }

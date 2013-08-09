@@ -44,8 +44,8 @@ namespace AwsApiTest
 				null,
 				null,
 				1,
-				10,
-				AwsAlexaRequest.ResponseGroup.ListCities,
+				100,
+				AwsAlexaRequest.ResponseGroup.Country,
 				this.OnCallback,
 				null);
 

@@ -31,23 +31,17 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "Site";
 
-		private AtomAtsDataUrl dataUrl;
-		private AtomAtsCountry country;
-		private AtomAtsGlobal global;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsSite(XElement element)
+			: base(element, AtomAtsSite.xmlPrefix, AtomAtsSite.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsSite.xmlPrefix, AtomAtsSite.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.dataUrl = AtomAtsDataUrl.Parse(element.Element(AtomAtsDataUrl.xmlPrefix, AtomAtsDataUrl.xmlName));
-			this.country = AtomAtsCountry.Parse(element.Element(AtomAtsCountry.xmlPrefix, AtomAtsCountry.xmlName));
-			this.global = AtomAtsGlobal.Parse(element.Element(AtomAtsGlobal.xmlPrefix, AtomAtsGlobal.xmlName));
+			this.DataUrl = AtomAtsDataUrl.ParseChild(element);
+			this.Country = AtomAtsCountry.ParseChild(element);
+			this.Global = AtomAtsGlobal.ParseChild(element);
 		}
 
 		// Public properties.
@@ -55,15 +49,15 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the data URL property.
 		/// </summary>
-		public AtomAtsDataUrl DataUrl { get { return this.dataUrl; } }
+		public AtomAtsDataUrl DataUrl { get; private set; }
 		/// <summary>
 		/// Gets the country property.
 		/// </summary>
-		public AtomAtsCountry Country { get { return this.country; } }
+		public AtomAtsCountry Country { get; private set; }
 		/// <summary>
 		/// Gets the global property.
 		/// </summary>
-		public AtomAtsGlobal Global { get { return this.global; } }
+		public AtomAtsGlobal Global { get; private set; }
 
 		// Public methods.
 

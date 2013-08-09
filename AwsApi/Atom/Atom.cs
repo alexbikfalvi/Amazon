@@ -17,6 +17,8 @@
  */
 
 using System;
+using System.Xml.Linq;
+using DotNetApi.Xml;
 
 namespace AwsApi.Atom
 {
@@ -26,5 +28,16 @@ namespace AwsApi.Atom
 	[Serializable]
 	public abstract class Atom
 	{
+		/// <summary>
+		/// Creates a new atom instance from the specified XML element with the given prefix and name.
+		/// </summary>
+		/// <param name="element">The XML element.</param>
+		/// <param name="xmlPrefix">The element prefix.</param>
+		/// <param name="xmlName">The element name.</param>
+		protected Atom(XElement element, string xmlPrefix, string xmlName)
+		{
+			// Check the XML element name.
+			if (!element.HasName(xmlPrefix, xmlName)) throw new AtomException("XML element name mismatch.", element);
+		}
 	}
 }

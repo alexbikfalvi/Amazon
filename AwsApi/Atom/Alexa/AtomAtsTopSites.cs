@@ -31,20 +31,17 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "TopSites";
 
-		private AtomAtsList list;
-		//private AtomAtsCities cities;
 
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsTopSites(XElement element)
+			: base(element, AtomAtsTopSites.xmlPrefix, AtomAtsTopSites.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsTopSites.xmlPrefix, AtomAtsTopSites.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.list = AtomAtsList.Parse(element.Element(AtomAtsList.xmlPrefix, AtomAtsList.xmlName));
+			this.List = AtomAtsList.ParseChild(element);
+			this.Cities = AtomAtsCities.ParseChild(element);
 		}
 
 		// Public properties.
@@ -52,7 +49,11 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the list property.
 		/// </summary>
-		public AtomAtsList List { get { return this.list; } }
+		public AtomAtsList List { get; private set; }
+		/// <summary>
+		/// Gets the cities property.
+		/// </summary>
+		public AtomAtsCities Cities { get; private set; }
 
 		// Public methods.
 
@@ -67,6 +68,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsTopSites(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsTopSites ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsTopSites.Parse(element.Element(AtomAtsTopSites.xmlPrefix, AtomAtsTopSites.xmlName));
 		}
 	}
 }

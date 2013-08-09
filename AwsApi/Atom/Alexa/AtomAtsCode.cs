@@ -23,20 +23,20 @@ using DotNetApi.Xml;
 namespace AwsApi.Atom.Alexa
 {
 	/// <summary>
-	/// A class representing an AWS country name atom object.
+	/// A class representing an AWS code atom object.
 	/// </summary>
 	[Serializable]
-	public sealed class AtomAtsName : Atom
+	public sealed class AtomAtsCode : Atom
 	{
 		internal const string xmlPrefix = "aws";
-		internal const string xmlName = "CountryName";
+		internal const string xmlName = "Code";
 
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
-		private AtomAtsName(XElement element)
-			: base(element, AtomAtsName.xmlPrefix, AtomAtsName.xmlName)
+		private AtomAtsCode(XElement element)
+			: base(element, AtomAtsCode.xmlPrefix, AtomAtsCode.xmlName)
 		{
 			// Parse the XML element value.
 			this.Value = element.Value;
@@ -56,12 +56,12 @@ namespace AwsApi.Atom.Alexa
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		/// <returns>The parsed atom object or null if the XML element is null.</returns>
-		public static AtomAtsName Parse(XElement element)
+		public static AtomAtsCode Parse(XElement element)
 		{
 			// If the XML element is null, return null.
 			if (null == element) return null;
 			// Else, return a new atom object.
-			return new AtomAtsName(element);
+			return new AtomAtsCode(element);
 		}
 
 		/// <summary>
@@ -69,12 +69,12 @@ namespace AwsApi.Atom.Alexa
 		/// </summary>
 		/// <param name="element">The parent XML element.</param>
 		/// <returns>The parsed atom object or null if no child is found.</returns>
-		public static AtomAtsName ParseChild(XElement element)
+		public static AtomAtsCode ParseChild(XElement element)
 		{
 			// If the XML element is null, throw an exception.
 			if (null == element) throw new AtomException("Parent element cannot be null.");
 			// Parse the first child element.
-			return AtomAtsName.Parse(element.Element(AtomAtsName.xmlPrefix, AtomAtsName.xmlName));
+			return AtomAtsCode.Parse(element.Element(AtomAtsCode.xmlPrefix, AtomAtsCode.xmlName));
 		}
 
 		/// <summary>

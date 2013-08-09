@@ -31,25 +31,18 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "List";
 
-		private AtomAtsName countryName;
-		private AtomAtsCountryCode countryCode;
-		private AtomAtsTotalSites totalSites;
-		private AtomAtsSites sites;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsList(XElement element)
+			: base(element, AtomAtsList.xmlPrefix, AtomAtsList.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsList.xmlPrefix, AtomAtsList.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.countryName = AtomAtsName.Parse(element.Element(AtomAtsName.xmlPrefix, AtomAtsName.xmlName));
-			this.countryCode = AtomAtsCountryCode.Parse(element.Element(AtomAtsCountryCode.xmlPrefix, AtomAtsCountryCode.xmlName));
-			this.totalSites = AtomAtsTotalSites.Parse(element.Element(AtomAtsTotalSites.xmlPrefix, AtomAtsTotalSites.xmlName));
-			this.sites = AtomAtsSites.Parse(element.Element(AtomAtsSites.xmlPrefix, AtomAtsSites.xmlName));
+			this.CountryName = AtomAtsName.ParseChild(element);
+			this.CountryCode = AtomAtsCountryCode.ParseChild(element);
+			this.TotalSites = AtomAtsTotalSites.ParseChild(element);
+			this.Sites = AtomAtsSites.ParseChild(element);
 		}
 
 		// Public properties.
@@ -57,19 +50,19 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the country name property.
 		/// </summary>
-		public AtomAtsName CountryName { get { return this.countryName; } }
+		public AtomAtsName CountryName { get; private set; }
 		/// <summary>
 		/// Gets the country code property.
 		/// </summary>
-		public AtomAtsCountryCode CountryCode { get { return this.countryCode; } }
+		public AtomAtsCountryCode CountryCode { get; private set; }
 		/// <summary>
 		/// Gets the total sites property.
 		/// </summary>
-		public AtomAtsTotalSites TotalSites { get { return this.totalSites; } }
+		public AtomAtsTotalSites TotalSites { get; private set; }
 		/// <summary>
 		/// Gets the sites property.
 		/// </summary>
-		public AtomAtsSites Sites { get { return this.sites; } }
+		public AtomAtsSites Sites { get; private set; }
 
 		// Public methods.
 
@@ -84,6 +77,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsList(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsList ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsList.Parse(element.Element(AtomAtsList.xmlPrefix, AtomAtsList.xmlName));
 		}
 	}
 }

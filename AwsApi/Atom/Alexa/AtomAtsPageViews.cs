@@ -31,21 +31,16 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "PageViews";
 
-		private AtomAtsPerMillion perMillion;
-		private AtomAtsPerUser perUser;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsPageViews(XElement element)
+			: base(element, AtomAtsPageViews.xmlPrefix, AtomAtsPageViews.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsPageViews.xmlPrefix, AtomAtsPageViews.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.perMillion = AtomAtsPerMillion.Parse(element.Element(AtomAtsPerMillion.xmlPrefix, AtomAtsPerMillion.xmlName));
-			this.perUser = AtomAtsPerUser.Parse(element.Element(AtomAtsPerUser.xmlPrefix, AtomAtsPerUser.xmlName));
+			this.PerMillion = AtomAtsPerMillion.ParseChild(element);
+			this.PerUser = AtomAtsPerUser.ParseChild(element);
 		}
 
 		// Public properties.
@@ -53,11 +48,11 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the per million property.
 		/// </summary>
-		public AtomAtsPerMillion PerMillion { get { return this.perMillion; } }
+		public AtomAtsPerMillion PerMillion { get; private set; }
 		/// <summary>
 		/// Gets the per user property.
 		/// </summary>
-		public AtomAtsPerUser PerUser { get { return this.perUser; } }
+		public AtomAtsPerUser PerUser { get; private set; }
 
 		// Public methods.
 
@@ -72,6 +67,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsPageViews(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsPageViews ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsPageViews.Parse(element.Element(AtomAtsPageViews.xmlPrefix, AtomAtsPageViews.xmlName));
 		}
 	}
 }

@@ -31,21 +31,16 @@ namespace AwsApi.Atom
 		internal static readonly string xmlPrefix = null;
 		internal const string xmlName = "Error";
 
-		private AtomCode code;
-		private AtomMessage message;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomError(XElement element)
+			: base(element, AtomError.xmlPrefix, AtomError.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomError.xmlPrefix, AtomError.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.code = AtomCode.Parse(element.Element(AtomCode.xmlPrefix, AtomCode.xmlName));
-			this.message = AtomMessage.Parse(element.Element(AtomMessage.xmlPrefix, AtomMessage.xmlName));
+			this.Code = AtomCode.ParseChild(element);
+			this.Message = AtomMessage.ParseChild(element);
 		}
 
 		// Public properties.
@@ -53,11 +48,11 @@ namespace AwsApi.Atom
 		/// <summary>
 		/// Gets the code property.
 		/// </summary>
-		public AtomCode Code { get { return this.code; } }
+		public AtomCode Code { get; private set; }
 		/// <summary>
 		/// Gets the country property.
 		/// </summary>
-		public AtomMessage Message { get { return this.message; } }
+		public AtomMessage Message { get; private set; }
 
 		// Public methods.
 
@@ -72,6 +67,19 @@ namespace AwsApi.Atom
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomError(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomError ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomError.Parse(element.Element(AtomError.xmlPrefix, AtomError.xmlName));
 		}
 	}
 }

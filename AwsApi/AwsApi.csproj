@@ -40,6 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atom\Alexa\AtomAtsAlexa.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsCities.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsCity.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsCode.cs" />
     <Compile Include="Atom\Alexa\AtomAtsCountry.cs" />
     <Compile Include="Atom\Alexa\AtomAtsCountryCode.cs" />
     <Compile Include="Atom\Alexa\AtomAtsName.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="Atom\Alexa\AtomAtsTopSitesResponse.cs" />
     <Compile Include="Atom\Alexa\AtomAtsTopSitesResult.cs" />
     <Compile Include="Atom\Alexa\AtomAtsTotalSites.cs" />
+    <Compile Include="Atom\Alexa\AtomAtsUsers.cs" />
     <Compile Include="Atom\AtomCode.cs" />
     <Compile Include="Atom\Atom.cs" />
     <Compile Include="Atom\AtomError.cs" />

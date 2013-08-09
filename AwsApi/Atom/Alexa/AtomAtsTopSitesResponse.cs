@@ -32,20 +32,15 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "TopSitesResponse";
 
-		private AtomAtsResponse response;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsTopSitesResponse(XElement element)
+			: base(element, AtomAtsTopSitesResponse.xmlPrefix, AtomAtsTopSitesResponse.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsTopSitesResponse.xmlPrefix, AtomAtsTopSitesResponse.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			XElement el = element.Element(AtomAtsResponse.xmlPrefix, AtomAtsResponse.xmlName);
-			this.response = AtomAtsResponse.Parse(el);
+			this.Response = AtomAtsResponse.ParseChild(element);
 		}
 
 		// Public properties.
@@ -53,7 +48,7 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the response property.
 		/// </summary>
-		public AtomAtsResponse Response { get { return this.response; } }
+		public AtomAtsResponse Response { get; private set; }
 
 		// Public methods.
 
@@ -69,6 +64,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsTopSitesResponse(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsTopSitesResponse ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsTopSitesResponse.Parse(element.Element(AtomAtsTopSitesResponse.xmlPrefix, AtomAtsTopSitesResponse.xmlName));
 		}
 	}
 }

@@ -31,20 +31,16 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "Global";
 
-		private AtomAtsRank rank;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		/// <param name="top">The top XML namespace.</param>
 		private AtomAtsGlobal(XElement element)
+			: base(element, AtomAtsGlobal.xmlPrefix, AtomAtsGlobal.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsGlobal.xmlPrefix, AtomAtsGlobal.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.rank = AtomAtsRank.Parse(element.Element(AtomAtsRank.xmlPrefix, AtomAtsRank.xmlName));
+			this.Rank = AtomAtsRank.ParseChild(element);
 		}
 
 		// Public properties.
@@ -52,7 +48,7 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the rank property.
 		/// </summary>
-		public AtomAtsRank Rank { get { return this.rank; } }
+		public AtomAtsRank Rank { get; private set; }
 
 		// Public methods.
 
@@ -67,6 +63,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsGlobal(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsGlobal ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsGlobal.Parse(element.Element(AtomAtsGlobal.xmlPrefix, AtomAtsGlobal.xmlName));
 		}
 	}
 }

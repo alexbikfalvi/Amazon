@@ -31,19 +31,15 @@ namespace AwsApi.Atom
 		internal static readonly string xmlPrefix = null;
 		internal const string xmlName = "Code";
 
-		private string value;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomCode(XElement element)
+			: base(element, AtomCode.xmlPrefix, AtomCode.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomCode.xmlPrefix, AtomCode.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element value.
-			this.value = element.Value;
+			this.Value = element.Value;
 		}
 
 		// Public properties.
@@ -51,7 +47,7 @@ namespace AwsApi.Atom
 		/// <summary>
 		/// Gets the value of the current atom element.
 		/// </summary>
-		public string Value { get { return this.value; } }
+		public string Value { get; private set; }
 
 		// Public methods.
 
@@ -70,12 +66,25 @@ namespace AwsApi.Atom
 		}
 
 		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomCode ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomCode.Parse(element.Element(AtomCode.xmlPrefix, AtomCode.xmlName));
+		}
+
+		/// <summary>
 		/// Converts this object into a string.
 		/// </summary>
 		/// <returns>The string.</returns>
 		public override string ToString()
 		{
-			return this.value;
+			return this.Value;
 		}
 	}
 }

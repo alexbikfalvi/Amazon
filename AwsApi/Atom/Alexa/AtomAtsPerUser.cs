@@ -31,19 +31,15 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "PerUser";
 
-		private decimal value;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsPerUser(XElement element)
+			: base(element, AtomAtsPerUser.xmlPrefix, AtomAtsPerUser.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsPerUser.xmlPrefix, AtomAtsPerUser.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element value.
-			this.value = decimal.Parse(element.Value);
+			this.Value = element.Value.ToDecimal();
 		}
 
 		// Public properties.
@@ -51,7 +47,7 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the value of the current atom element.
 		/// </summary>
-		public decimal Value { get { return this.value; } }
+		public decimal Value { get; private set; }
 
 		// Public methods.
 
@@ -66,6 +62,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsPerUser(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsPerUser ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsPerUser.Parse(element.Element(AtomAtsPerUser.xmlPrefix, AtomAtsPerUser.xmlName));
 		}
 	}
 }

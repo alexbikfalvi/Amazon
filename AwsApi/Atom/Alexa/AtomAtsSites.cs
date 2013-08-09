@@ -40,10 +40,8 @@ namespace AwsApi.Atom.Alexa
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsSites(XElement element)
+			: base(element, AtomAtsSites.xmlPrefix, AtomAtsSites.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsSites.xmlPrefix, AtomAtsSites.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
 			foreach (XElement el in element.Elements(AtomAtsSite.xmlPrefix, AtomAtsSite.xmlName))
 			{
@@ -77,6 +75,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsSites(element);
+		}
+
+		/// <summary>
+		/// Parses the XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The XML element.</param>
+		/// <returns>The parsed atom object or null if the XML element is null.</returns>
+		public static AtomAtsSites ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Else, return a new atom object.
+			return AtomAtsSites.Parse(element.Element(AtomAtsSites.xmlPrefix, AtomAtsSites.xmlName));
 		}
 
 		/// <summary>

@@ -23,31 +23,51 @@ using DotNetApi.Xml;
 namespace AwsApi.Atom.Alexa
 {
 	/// <summary>
-	/// A class representing an AWS country name atom object.
+	/// A class representing an AWS city atom object.
 	/// </summary>
 	[Serializable]
-	public sealed class AtomAtsName : Atom
+	public sealed class AtomAtsCity : Atom
 	{
 		internal const string xmlPrefix = "aws";
-		internal const string xmlName = "CountryName";
+		internal const string xmlName = "City";
 
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
-		private AtomAtsName(XElement element)
-			: base(element, AtomAtsName.xmlPrefix, AtomAtsName.xmlName)
+		private AtomAtsCity(XElement element)
+			: base(element, AtomAtsCity.xmlPrefix, AtomAtsCity.xmlName)
 		{
-			// Parse the XML element value.
-			this.Value = element.Value;
+			// Parse the XML element members.
+			this.Name = AtomAtsName.ParseChild(element);
+			this.Code = AtomAtsCode.ParseChild(element);
+			this.TotalSites = AtomAtsTotalSites.ParseChild(element);
+			this.PageViews = AtomAtsPageViews.ParseChild(element);
+			this.Users = AtomAtsUsers.ParseChild(element);
 		}
 
 		// Public properties.
 
 		/// <summary>
-		/// Gets the value of the current atom element.
+		/// Gets the name property.
 		/// </summary>
-		public string Value { get; private set; }
+		public AtomAtsName Name { get; private set; }
+		/// <summary>
+		/// Gets the code property.
+		/// </summary>
+		public AtomAtsCode Code { get; private set; }
+		/// <summary>
+		/// Gets the total sites property.
+		/// </summary>
+		public AtomAtsTotalSites TotalSites { get; private set; }
+		/// <summary>
+		/// Gets the page views property.
+		/// </summary>
+		public AtomAtsPageViews PageViews { get; private set; }
+		/// <summary>
+		/// Gets the users property.
+		/// </summary>
+		public AtomAtsUsers Users { get; private set; }
 
 		// Public methods.
 
@@ -55,35 +75,14 @@ namespace AwsApi.Atom.Alexa
 		/// Parses the XML element into the corresponding atom object.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
+		/// <param name="top">The XML namespace.</param>
 		/// <returns>The parsed atom object or null if the XML element is null.</returns>
-		public static AtomAtsName Parse(XElement element)
+		public static AtomAtsCity Parse(XElement element)
 		{
 			// If the XML element is null, return null.
 			if (null == element) return null;
 			// Else, return a new atom object.
-			return new AtomAtsName(element);
-		}
-
-		/// <summary>
-		/// Parses the first child XML element into the corresponding atom object.
-		/// </summary>
-		/// <param name="element">The parent XML element.</param>
-		/// <returns>The parsed atom object or null if no child is found.</returns>
-		public static AtomAtsName ParseChild(XElement element)
-		{
-			// If the XML element is null, throw an exception.
-			if (null == element) throw new AtomException("Parent element cannot be null.");
-			// Parse the first child element.
-			return AtomAtsName.Parse(element.Element(AtomAtsName.xmlPrefix, AtomAtsName.xmlName));
-		}
-
-		/// <summary>
-		/// Converts this object into a string.
-		/// </summary>
-		/// <returns>The string.</returns>
-		public override string ToString()
-		{
-			return this.Value;
+			return new AtomAtsCity(element);
 		}
 	}
 }

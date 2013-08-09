@@ -31,19 +31,15 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "OperationRequest";
 
-		private AtomAtsRequestId requestId;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsOperationRequest(XElement element)
+			: base(element, AtomAtsOperationRequest.xmlPrefix, AtomAtsOperationRequest.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsOperationRequest.xmlPrefix, AtomAtsOperationRequest.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.requestId = AtomAtsRequestId.Parse(element.Element(AtomAtsRequestId.xmlPrefix, AtomAtsRequestId.xmlName));
+			this.RequestId = AtomAtsRequestId.ParseChild(element);
 		}
 
 		// Public properties.
@@ -51,7 +47,7 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the request ID property.
 		/// </summary>
-		public AtomAtsRequestId RequestId { get { return this.requestId; } }
+		public AtomAtsRequestId RequestId { get; private set; }
 
 		// Public methods.
 
@@ -66,6 +62,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsOperationRequest(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsOperationRequest ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsOperationRequest.Parse(element.Element(AtomAtsOperationRequest.xmlPrefix, AtomAtsOperationRequest.xmlName));
 		}
 	}
 }

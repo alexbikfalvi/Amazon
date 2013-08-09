@@ -31,23 +31,17 @@ namespace AwsApi.Atom.Alexa
 		internal const string xmlPrefix = "aws";
 		internal const string xmlName = "Response";
 
-		private AtomAtsOperationRequest operationRequest;
-		private AtomAtsTopSitesResult topSitesResult;
-		private AtomAtsResponseStatus responseStatus;
-
 		/// <summary>
 		/// Creates a new atom instance from the specified XML element.
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		private AtomAtsResponse(XElement element)
+			: base(element, AtomAtsResponse.xmlPrefix, AtomAtsResponse.xmlName)
 		{
-			// Check the XML element name.
-			if (!element.HasName(AtomAtsResponse.xmlPrefix, AtomAtsResponse.xmlName)) throw new AtomException("XML element name mismatch.", element);
-
 			// Parse the XML element members.
-			this.operationRequest = AtomAtsOperationRequest.Parse(element.Element(AtomAtsOperationRequest.xmlPrefix, AtomAtsOperationRequest.xmlName));
-			this.topSitesResult = AtomAtsTopSitesResult.Parse(element.Element(AtomAtsTopSitesResult.xmlPrefix, AtomAtsTopSitesResult.xmlName));
-			this.responseStatus = AtomAtsResponseStatus.Parse(element.Element(AtomAtsResponseStatus.xmlPrefix, AtomAtsResponseStatus.xmlName));
+			this.OperationRequest = AtomAtsOperationRequest.ParseChild(element);
+			this.TopSitesResult = AtomAtsTopSitesResult.ParseChild(element);
+			this.ResponseStatus = AtomAtsResponseStatus.ParseChild(element);
 		}
 
 		// Public properties.
@@ -55,15 +49,15 @@ namespace AwsApi.Atom.Alexa
 		/// <summary>
 		/// Gets the operation request property.
 		/// </summary>
-		public AtomAtsOperationRequest OperationRequest { get { return this.operationRequest; } }
+		public AtomAtsOperationRequest OperationRequest { get; private set; }
 		/// <summary>
 		/// Gets the top sites result property.
 		/// </summary>
-		public AtomAtsTopSitesResult TopSitesResult { get { return this.topSitesResult; } }
+		public AtomAtsTopSitesResult TopSitesResult { get; private set; }
 		/// <summary>
 		/// Gets the response status property.
 		/// </summary>
-		public AtomAtsResponseStatus ResponseStatus { get { return this.responseStatus; } }
+		public AtomAtsResponseStatus ResponseStatus { get; private set; }
 
 		// Public methods.
 
@@ -78,6 +72,19 @@ namespace AwsApi.Atom.Alexa
 			if (null == element) return null;
 			// Else, return a new atom object.
 			return new AtomAtsResponse(element);
+		}
+
+		/// <summary>
+		/// Parses the first child XML element into the corresponding atom object.
+		/// </summary>
+		/// <param name="element">The parent XML element.</param>
+		/// <returns>The parsed atom object or null if no child is found.</returns>
+		public static AtomAtsResponse ParseChild(XElement element)
+		{
+			// If the XML element is null, throw an exception.
+			if (null == element) throw new AtomException("Parent element cannot be null.");
+			// Parse the first child element.
+			return AtomAtsResponse.Parse(element.Element(AtomAtsResponse.xmlPrefix, AtomAtsResponse.xmlName));
 		}
 	}
 }
